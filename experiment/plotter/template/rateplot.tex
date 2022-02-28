@@ -1,0 +1,8 @@
+% run{{ run }}
+% loop {{ loop }}
+\addplot table[
+    col sep=comma,
+    x expr= \thisrowno{{'{'+x+'}'}}/{{ xdivisor }},
+    y expr= \thisrowno{{'{'+y+'}'}}/{{ ydivisor }},
+]{{'{'+content+'}'}};
+\addlegendentry{{'{'+legendentry+'}'}}

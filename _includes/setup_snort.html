@@ -1,0 +1,35 @@
+	    <p><pre><code># prepare link interfaces
+for port in ens3 ens4; do
+	ip link set dev $port up
+	ip link set dev $port promisc on
+	ip link set dev $port arp off
+	ethtool -K $port gro off lro off
+	ethtool -K $port sg off tso off gso off
+	sysctl -w net.ipv6.conf.$port.disable_ipv6=1
+done
+
+# change outgoing mac to enable forwarding for SR-IOV
+arptables -A OUTPUT -o ens5 --h-length 6 -j mangle --mangle-mac-d '00:11:22:33:44:55'
+
+# download snort configs
+git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+# build daq
+wget -q https://www.snort.org/downloads/snortplus/daq-2.2.2.tar.gz
+tar -xzf daq-2.2.2.tar.gz
+cd ~/daq-2.2.2
+./configure --disable-dump-module --disable-ipfw-module --disable-ipq-module --disable-nfq-module --disable-pcap-module --disable-netmap-module --enable-static --disable-shared --prefix=/opt/snort
+make
+make install
+ldconfig
+
+# build snort
+export PATH=$PATH:/opt/snort/bin/
+cd /root
+wget -q https://www.snort.org/downloads/snortplus/snort-3.0.0-beta.tar.gz
+tar -xzf snort-3.0.0-beta.tar.gz
+cd /root/snort-3.0.0
+./configure_cmake.sh --prefix=/opt/snort --with-daq-libraries=/opt/snort/lib --with-daq-includes=/opt/snort/include --enable-static-daq --disable-docs
+cd build
+make -j 4
+make install</code></pre></p>

@@ -1,0 +1,7 @@
+<network>
+	<name>net</name>
+	<forward dev='eno1' mode='bridge'>
+		<interface dev='eno1' />
+	</forward>
+</network>
+

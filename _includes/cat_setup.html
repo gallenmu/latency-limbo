@@ -1,0 +1,9 @@
+<p><pre><code>apt install ethtool intel-cmt-cat
+
+# needed for cat tool
+modprobe msr
+
+pqos -R
+pqos -a "llc:1=1;llc:2=0,2,3"
+pqos -e "llc:1=0xff;llc:2=0xf00"
+pqos -s</code></pre></p>

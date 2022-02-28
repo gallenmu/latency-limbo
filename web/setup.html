@@ -1,0 +1,46 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+	{% include head.html %}
+	<body class="homepage homepage_index">
+		{% include header.html %}
+		<main class="content container" role="main">
+			<div class="content-row">
+				{% include nav.html %}
+				<article class="inner-content">
+					<div class="inner-content">
+						<h1 id="the-chair-of-br-network-architectures-and-services">Hardware Setup</h1>
+
+						<h5>Network Topology</h5>
+
+						<p><img src="{{site.url}}/figures/setup/setup.svg" style="display:block;margin-left:auto;margin-right:auto;width=90%;" alt="network topology"/></p>
+						<h3>Hardware</h3>
+
+						<p>All tree nodes are equipped with identical hardware consisting of:</p>
+
+						<ul>
+							<li>SoC: Intel Xeon D-1518 CPU</li>
+							<li>Dual port Intel X552 NIC (10G Ethernet)</li>
+							<li>32 GiB RAM</li>
+						</ul>
+
+						<h3>Topology</h3>
+
+						<p>The setup consists of three nodes:<p>
+
+						<ul>
+							<li>Load generator (LoadGen): runs MoonGen, creates traffic for the DuT and receives the traffic from the DuT</li>
+							<li>Device under test (DuT): forwards the traffic received from the LoadGen between its interfaces</li>
+							<li>Timestamper (TS): Receives a copy of every packet exchanged between LoadGen and DuT for timestamping which is done in hardware using the capabilities of the X552 NIC</li>
+						</ul>
+
+						<p>DuT and LoadGen are directly connected via optical fibers. The TS is connected via passive optical taps to mirror both fibers between DuT and LoadGen. The passive optical taps have a neglegible impact on latency and no impact on the variance of the delay.</p>
+
+					</div>
+				</article>
+			</div>
+		</main>
+		{% include footer.html %}
+	</body></html>

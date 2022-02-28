@@ -1,0 +1,7 @@
+<network>
+	<name>net8</name>
+	<forward dev='eno8' mode='bridge'>
+		<interface dev='eno8' />
+	</forward>
+</network>
+
