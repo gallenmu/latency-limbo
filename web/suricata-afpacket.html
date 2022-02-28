@@ -14,11 +14,7 @@
 						<h1 id="the-chair-of-br-network-architectures-and-services">Figure 3, Figure 5, Figure 6</h1>
 
 						<h5>Suricata afpacket</h5>
-						<p>
-							<figure style="display:block;margin-left:auto;margin-right:auto;width:50%;float:left;">
-								<img src="{{site.url}}/figures/suricata-afpacket/hdr-histogram-run0.svg"  alt="Suricata experiment using afpacket backend."/>
-								<figcaption style="text-align:center;">Rate: 10000 pkts/s</figcaption>
-							</figure>
+						<p><img src="{{site.url}}/figures/suricata-afpacket/hdr-histogram-run0.svg"  alt="Suricata experiment using afpacket backend." style="display:block;margin-left:auto;margin-right:auto;width=90%;" /></p>
 						</p>
 
 						<h2 style="margin: 30px 0 15px 0;clear:both;">Steps to reproduce measurements</h2>
@@ -42,19 +38,21 @@
 						</p>
 
 						<h3>Experiment</h3>
+						<p style="margin-bottom:0px;">
+						The experiment.sh file is used to initiat the experiment workflow.
+						</p>
 						<p>
 						<details>
 							<summary>experiment.sh</summary>
 							{% include experiment/experiment.sh %}
 						</details>
-						</p>
-						<p>
 						<details>
 							<summary>run.sh</summary>
 							{% include experiment/run.sh %}
 						</details>
 						</p>
 
+						<!--
 						<p style="margin-bottom:0px;">
 						Configuration HW: setup device under test (DuT) for DPDK-l2fwd / Snort-fwd / Snort-filter:
 						</p>
@@ -177,7 +175,7 @@ for i in *.tex; do lualatex $i; done</code></pre></p>
 						</details></p>
 
 						<h3>Output</h3>
-						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures">repository</a>. Test.</p>
+						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures">repository</a>. Test.</p>-->
 					</div>
 				</article>
 			</div>
