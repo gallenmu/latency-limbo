@@ -1,11 +1,11 @@
 <nav class="navigation">
 	<ul class="nav-list">
 		<li {% if page.url == "/" %}class="current_path current"{% endif %}><a href="{{ site.url }}/">Home</a></li>
-		<li {% if page.url == "/setup.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/setup.html">Hardware Setup</a></li>
+		<li {% if page.url == "{{ site.url }}/web/setup.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/setup.html">Hardware Setup</a></li>
 	</ul>
 	<div style="padding: 10pt 5pt 5pt 5pt; background-color: white"><b>Paper (under review)</b></div>
 	<ul class="nav-list">
-		<li {% if page.url == "/placeholder.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/placeholder.html">Figure 1</a></li>
+		<li {% if page.url == "{{ site.url }}/web/suricata-afpacket.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/suricata-afpacket.html">Figure 1</a></li>
 		<li {% if page.url == "/placeholder.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/placeholder.html">Figure 5</a></li>
 		<li {% if page.url == "/placeholder.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/placeholder.html">Figure 6</a></li>
 		<li {% if page.url == "/placeholder.html" %}class="current_path current"{% endif %}><a href="{{ site.url }}/web/placeholder.html">Figure 7</a></li>
