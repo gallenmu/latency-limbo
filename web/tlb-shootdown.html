@@ -1,0 +1,61 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+	{% include head.html %}
+	<body class="homepage homepage_index">
+		{% include header.html %}
+		<main class="content container" role="main">
+			<div class="content-row">
+				{% include nav.html %}
+				<article class="inner-content">
+					<div class="inner-content">
+						<h1 id="the-chair-of-br-network-architectures-and-services">Figure 8</h1>
+
+						<h5>Snort-filter (VM)</h5>
+						<p><img src="{{site.url}}/figures/snort-filter-nohz-tlbshootdown/vm/pcap/latencies-pre-rate10000-snort-filter.pcap.worst-filtered.pdf.svg" style="display:block;margin-left:auto;margin-right:auto;width=90%;" alt="hipnet21/figures/snort-filter-nohz-tlbshootdown/vm/pcap/latencies-pre-rate10000-snort-filter.pcap.worst-filtered.pdf.svg"/></p>
+
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce measurements</h2>
+
+						<p>The setup and experiment execution for the worst-case measurements of Snort-fwd (HW) evaluation is part of the description for <a href="{{site.url}}/web/hdr.html">Figure 5</a>. The high latency spike caused by TLB shootdowns happens on the first or second measurement after the machine has booted.</p>
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce figures</h2>
+						<h3>Raw data</h3>
+						<p>Pcaps (<a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-filter-nohz-tlbshootdown/vm/pcap">Snort-filter (VM)</a>)</p>
+
+						<h3>Evaluation execution</h3>
+						<p><details>
+							<summary>Setup evaluator</summary>
+							{% include evaluator_setup.html %}
+						</details>
+						<details>
+							<summary>Generate figures</summary>
+							<p><pre><code>git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+#decompress pcaps
+cd /root/hipnet21/measurements
+for i in $(find . -iname *.zst); do unzstd --rm $i; done;
+
+#create hw figure
+export MPATH=snort-filter-nohz-tlbshootdown
+cd /root/hipnet21/figures/$MPATH/vm/pcap
+su postgres -c "createuser -s root"
+dropdb --if-exists root
+createdb root
+export PGDATABASE=root
+for i in /root/hipnet21/measurements/$MPATH/vm/pcap/*-pre-rate10000-*.pcap; do /root/hipnet21/scripts/pcap-import.sh $i; /root/hipnet21/scripts/pcap-analysis.sh $i; done;
+python3 /root/hipnet21/scripts/pcap-tex-create.py .
+for i in *.tex; do lualatex $i; done
+</code></pre></p>
+						</details></p>
+
+						<h3>Output</h3>
+						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures/snort-filter-nohz-tlbshootdown">repository</a>. The filename is latencies-pre-rate10000-snort-filter.pcap.worst-filtered.pdf in the respective subfolder.</p>
+					</div>
+				</article>
+			</div>
+		</main>
+		{% include footer.html %}
+	</body></html>

@@ -1,0 +1,4 @@
+num_cores: 4
+num_worst: 5000
+trim_ms: 1000
+bucket_size: 100

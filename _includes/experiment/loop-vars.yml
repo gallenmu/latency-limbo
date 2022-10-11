@@ -1,0 +1,5 @@
+packetrate: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
+config: ['suricata.yaml', 'minimal.yaml', 'suricata-af.yaml']
+repeat: [0,1,2]
+irqrecording: [0]
+disablenic: [1]

@@ -1,0 +1,67 @@
+<p><pre><code>apt-get install -y build-essential \
+        autotools-dev libdumbnet-dev libluajit-5.1-dev libpcap-dev \
+        libpcre3-dev zlib1g-dev pkg-config libhwloc-dev cmake liblzma-dev \
+        openssl libssl-dev cpputest libsqlite3-dev libtool git autoconf \
+        bison flex asciidoc source-highlight \
+        libgoogle-perftools-dev
+
+# bind rcu processes to core 0
+# recommended by https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html-single/performance_tuning_guide/#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_suggestions-Configuring_kernel_tick_time
+for i in `pgrep rcu[^c]` ; do taskset -pc 0 $i ; done
+
+# disable rt throttling
+# recommended https://wiki.opnfv.org/display/kvm/Nfv-kvm-tuning
+echo -1 > /proc/sys/kernel/sched_rt_runtime_us
+
+# set virt memory stats collector 3600s interval (default 1s)
+# recommended by https://access.redhat.com/sites/default/files/attachments/201501-perf-brief-low-latency-tuning-rhel7-v1.1.pdf
+sysctl vm.stat_interval=3600
+
+# download config data
+git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+# setup dpdk for daq
+git clone https://github.com/gallenmu/napadpdk /root/napadpdk
+cd /root/napadpdk
+git checkout f819cd087d48332060b15da5afee27cb5a9a508e
+make config T=x86_64-native-linuxapp-gcc
+cd build
+make -j 3
+mv /root/napadpdk/build /root/napadpdk/x86_64-native-linuxapp-gcc
+export RTE_SDK=/root/napadpdk
+
+# build l2fwd
+export PQOS_INSTALL_PATH=/usr/lib
+cd /root/napadpdk/examples/l2fwd-cat
+make
+
+# dpdk_config: load driver, bind X552 interfaces, allocate hugepages
+modprobe uio
+insmod /root/napadpdk/x86_64-native-linuxapp-gcc/kmod/igb_uio.ko
+for id in $(/root/napadpdk/usertools/dpdk-devbind.py --status | grep -v Active | grep X552 | cut -f 1 -d " ")
+do
+        echo "Binding interface $id to DPDK"
+        /root/napadpdk/usertools/dpdk-devbind.py  --bind=igb_uio $id
+done
+mkdir -p /mnt/huge
+mount -t hugetlbfs nodev /mnt/huge
+echo 512 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+
+# build daq
+git clone https://github.com/gallenmu/daq_dpdk_multiqueue /root/daq
+cd /root/daq
+git checkout 5b25e4192b10858cbce434f46f5c8abec1360661 # batched processing #32
+cd /root/daq/daq-2.2.2
+autoreconf -f -i
+./configure --disable-dump-module --disable-ipfw-module --disable-ipq-module --disable-nfq-module --disable-pcap-module --disable-netmap-module --disable-afpacket-module --enable-static --disable-shared --prefix=/opt/snort
+make -j 3
+make install
+
+# build snort
+export PATH=$PATH:/opt/snort/bin/
+git clone https://github.com/gallenmu/snort-3.0.0-beta /root/snort-3.0.0
+cd /root/snort-3.0.0
+./configure_cmake.sh --prefix=/opt/snort --with-daq-libraries=/opt/snort/lib --with-daq-includes=/opt/snort/include --enable-static-daq --disable-docs
+cd build
+make -j 3
+make install</code></pre></p>

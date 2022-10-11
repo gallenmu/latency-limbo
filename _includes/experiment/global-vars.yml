@@ -1,0 +1,6 @@
+dpdk:
+        commit: '4269df28562df5e796eee1299bf8b164587be6ca'
+moongen:
+        repo: 'https://github.com/gallenmu/moongen'
+        branch: 'master'
+        commit: '06164f5d4269bb1854eeea2c76c700119b0fcae3'

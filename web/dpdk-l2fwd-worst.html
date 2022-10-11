@@ -1,0 +1,247 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+	{% include head.html %}
+	<body class="homepage homepage_index">
+		{% include header.html %}
+		<main class="content container" role="^:main">
+			<div class="content-row">
+				{% include nav.html %}
+				<article class="inner-content">
+					<div class="inner-content">
+						<h1 id="the-chair-of-br-network-architectures-and-services">Figure 6</h1>
+
+						<h5>DPDK-l2fwd (rt-kernel)</h5>
+						<p><img src="{{site.url}}/figures/dpdk-l2fwd/no-vm/rt/worstof-timeseries-run00.svg"  alt="DPDK-l2fwd non-virtualized, realtime kernel, worst-of timeseries." style="display:block;margin-left:auto;margin-right:auto;width=90%;" /></p>
+						</p>
+
+						<h5>DPDK-l2fwd (vanilla-kernel)</h5>
+						<p><img src="{{site.url}}/figures/dpdk-l2fwd/no-vm/vanilla/worstof-timeseries-run00.svg"  alt="DPDK-l2fwd non-virtualized, vanilla kernel, worst-of timeseries." style="display:block;margin-left:auto;margin-right:auto;width=90%;" /></p>
+						</p>
+
+						<h5>DPDK-l2fwd (nohz-kernel)</h5>
+						<p><img src="{{site.url}}/figures/dpdk-l2fwd/no-vm/no-hz/worstof-timeseries-run00.svg"  alt="DPDK-l2fwd non-virtualized, no-hz kernel, worst-of timeseries." style="display:block;margin-left:auto;margin-right:auto;width=90%;" /></p>
+						</p>
+
+						<h2 style="margin: 30px 0 15px 0;clear:both;">Steps to reproduce measurements</h2>
+
+						<h3>Images</h3>
+						<p>Images used for testing</p>
+						<p>
+						<details>
+							<summary>Loadgen, timestamper</summary>
+							{% include debian_buster_default.html %}
+						</details>
+
+						<details>
+							<summary>Alternative I: Device under test rt kernel</summary>
+							{% include debian_bullseye_rt.html %}
+						</details>
+
+						<details>
+							<summary>Alternative II: Device under test vanilla kernel</summary>
+							{% include debian_bullseye_vanilla.html %}
+						</details>
+
+						<details>
+							<summary>Alternative III: Device under test no-hz kernel</summary>
+							{% include debian_bullseye_nohz.html %}
+						</details>
+
+						<details>
+							<summary>Evaluator</summary>
+							{% include debian_buster_default.html %}
+						</details>
+						</p>
+
+						<h3>Experiment</h3>
+
+						<p style="margin-bottom:0px;">
+						This command uses four experiment nodes of a testbed, the loadgen-node, the dut-node, the timestamper-node, and the evaluator-node. The loadgen, dut and timestamper nodes must be wired according to the setup description.
+						<details>
+							<summary>Executed command</summary>
+							<p><pre><code># vanilla kernel
+./experiment.sh loadgen-node dut-node timestamper-node evaluator-node no-vm dpdk-l2fwd-cat optimized bullseye-default 60
+# rt kernel
+./experiment.sh loadgen-node dut-node timestamper-node evaluator-node no-vm dpdk-l2fwd-cat optimized bullseye-rt 60
+# nohz kernel
+./experiment.sh loadgen-node dut-node timestamper-node evaluator-node no-vm dpdk-l2fwd-cat optimized bullseye-nohz 60</p></pre></code>
+						</details>
+						</p>
+
+						<p style="margin-bottom:0px;">
+						The experiment.sh file is used to initiate the experiment workflow. The run.sh file is called by the experiment.sh file.
+						<details>
+							<summary>experiment.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/experiment.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						<details>
+							<summary>run.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/run.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						</p>
+
+						<p>All the scripts called by experiment.sh and run.sh can be found in our <a href="https://github.com/gallenmu/latency-limbo/tree/master/_includes/experiment">repository</a>.</p>
+	
+						<!--<p style="margin-bottom:0px;">
+						The following files are executed on the VM running on the device under test.
+						<details>
+							<summary>setup-suricata-af.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/dut/setup-suricata-af.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						<details>
+							<summary>measurement-suricata-af.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/dut/measurement-suricata-af.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						</p>
+
+						<p style="margin-bottom:0px;">
+						The following files are executed on the experiment node performing the evaluation. The local.yml file contains the node-specific variables.
+						<details>
+							<summary>setup.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/evaluator/setup.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						<details>
+							<summary>evaluate.sh</summary>
+							{%- capture rawContent -%}{%- include experiment/evaluator/evaluate.sh -%}{%- endcapture -%}
+							<p><pre><code>{{- rawContent -}}</p></pre></code>
+						</details>
+						</p>-->
+
+						<!--
+						<p style="margin-bottom:0px;">
+						Configuration HW: setup device under test (DuT) for DPDK-l2fwd / Snort-fwd / Snort-filter:
+						</p>
+						<div style="margin-top:0px; margin-left:16px;">
+						<details>
+							<summary>Boot parameter</summary>
+							{% include hw_bootparam.html %}
+						</details>
+						<details>
+							<summary>Cache partitioning</summary>
+							{% include cat_setup.html %}
+						</details>
+						<details>
+							<summary>Setup DPDK/Snort</summary>
+							{% include dpdk_snort_setup.html %}
+						</details>
+						</div>
+
+						<p style="margin-bottom:0px;">
+						Configuration VM: setup device under test (DuT) for DPDK-l2fwd / Snort-fwd / Snort-filter:
+						</p>
+						<div style="margin-top:0px; margin-left:16px;">
+						<details>
+							<summary>Boot parameter VM host</summary>
+							{% include vm_host_bootparam_optimized.html %}
+						</details>
+
+						<details>
+							<summary>Setup VM host</summary>
+							{% include setup_vm_host_optimized.html %}
+						</details>
+
+						<details>
+							<summary>Cache partitioning VM host</summary>
+							{% include cat_setup_vm.html %}
+						</details>
+
+						<details>
+							<summary>Boot parameter VM</summary>
+							{% include vm_bootparam_optimized.html %}
+						</details>
+
+						<details>
+							<summary>Setup VM DPDK/Snort</summary>
+							{% include dpdk_snort_setup.html %}
+						</details>
+						</div>
+
+						<p>
+						<details>
+							<summary>Setup timestamper</summary>
+							{% include timestamper_setup.html %}
+						</details>
+						</p>
+
+						<h3>Experiment execution</h3>
+						<p>1. Start forwarder on the DuT:
+						<details>
+							<summary>Var A: Start DPDK-l2fwd</summary>
+							<p><pre><code>/root/napadpdk/examples/l2fwd-cat/build/l2fwd-cat -l 1 -n 4</pre></code></p>
+						</details>
+						<details>
+							<summary>Var B: Start Snort-fwd</summary>
+							<p><pre><code>taskset -c 1 /opt/snort/bin/snort -c "/root/hipnet21/configs/snort/snort-norules.lua" --daq-dir /opt/snort/lib/daq --daq dpdk --daq-var dpdk_argc="-n1" -i "dpdk0:dpdk1" -Q -z 1</pre></code></p>
+						</details>
+						<details>
+							<summary>Var C: Snort-filter</summary>
+							<p><pre><code>taskset -c 1 /opt/snort/bin/snort -c "/root/hipnet21/configs/snort/snort-communityrules.lua" --daq-dir /opt/snort/lib/daq --daq dpdk --daq-var dpdk_argc="-n1" -i "dpdk0:dpdk1" -Q -z 1</pre></code></p>
+						</details>
+							</p>
+
+						<p>2. Wait until forwarder has been started, then start MoonGen on the LoadGen:
+						<details>
+							<summary>Start MoonGen</summary>
+							<p><pre><code># $RATE is the number of generated packets per second
+# $PACKETS is the number of packets to be generated
+/root/moongen/build/MoonGen /root/moongen/examples/moonsniff/traffic-gen.lua --src-mac 52:54:00:8d:9d:ad --dst-mac 52:54:00:21:f8:29 --fix-packetrate $RATE --packets $PACKETS --warm-up 30 --l4-dst 53 --flows 10 --burst 1 1 0</pre></code></p>
+						</details>
+						</p>
+
+						<p>3. After Moongen on the LoadGen has been started 1000 packets are sent to warm up the DuT. After that packet generation is paused for 30 seconds. In this pause MoonGen's packet sniffer on the timestamper should be started to record the actual measurement:
+						<details>
+							<summary>Start MoonGen</summary>
+							<p><pre><code>/root/moongen/build/MoonGen /root/moongen/examples/moonsniff/sniffer.lua 1 0 --capture --time 60 --snaplen 256</pre></code></p>
+						</details>
+						</p>
+
+						<p>4. The timestamper stops recording after 60 seconds and creates the two pcap files latencies-pre.pcap and latencies-post.pcap which can be used for evaluation.</p>
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce figures</h2>
+						<h3>Raw data</h3>
+						<p>Pcaps (<a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/dpdk-l2fwd-nohz/hw/pcap">DPDK-l2fwd (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/dpdk-l2fwd-nohz/vm/pcap">DPDK-l2fwd (VM)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-fwd-nohz/hw/pcap">Snort-fwd (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-fwd-nohz/vm/pcap">Snort-fwd (VM)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-filter-nohz/hw/pcap">Snort-filter (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-filter-nohz/vm/pcap">Snort-filter (VM)</a>)</p>
+
+
+						<h3>Evaluation execution</h3>
+						<p><details>
+							<summary>Setup evaluator</summary>
+							{% include evaluator_setup.html %}
+						</details>
+						<details>
+							<summary>Generate figures</summary>
+							<p><pre><code>git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+#decompress pcaps
+cd /root/hipnet21/measurements
+for i in $(find . -iname *.zst); do zstd --rm -d $i; done;
+
+#create figures
+# MPATH = dpdk-l2fwd-nohz | snort-fwd-nohz | snort-filter-nohz
+# MODE = vm | hw
+cd /root/hipnet21/figures/$MPATH/$MODE/pcap
+su postgres -c "createuser -s root"
+dropdb --if-exists root
+createdb root
+export PGDATABASE=root
+for i in /root/hipnet21/measurements/$MPATH/$MODE/pcap/*-pre-*.pcap; do /root/hipnet21/scripts/pcap-import.sh $i; /root/hipnet21/scripts/pcap-analysis.sh $i; done;
+python3 /root/hipnet21/scripts/hdrplot.py .
+python3 /root/hipnet21/scripts/hdrplot-tex-create.py .
+for i in *.tex; do lualatex $i; done</code></pre></p>
+						</details></p>
+
+						<h3>Output</h3>
+						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures">repository</a>. Test.</p>-->
+					</div>
+				</article>
+			</div>
+		</main>
+		{% include footer.html %}
+	</body></html>

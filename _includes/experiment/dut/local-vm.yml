@@ -1,0 +1,18 @@
+port:
+        rx: 'ens3'
+        tx: 'ens4'
+portno:
+        rx: '1'
+        tx: '0'
+pciadr:
+        rx: '00:03.0'
+        tx: '00:04.0'
+cpu:
+        freq: '50'
+        turbo: '0'
+snort:
+        ruleset: 'security'
+dpdk:
+        commit: '5a802fb6cd9128f3a0a50c5942c336c88f03b252'
+enic: 'ens2'
+enic-vmhost: 'eno1'

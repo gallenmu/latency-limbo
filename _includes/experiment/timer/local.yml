@@ -1,0 +1,8 @@
+port:
+        rx: 'eno8'
+        tx: 'eno7'
+portno:
+        rx: '1'
+        tx: '0'
+timestamping:
+        hw: '0'

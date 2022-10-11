@@ -1,0 +1,112 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+	{% include head.html %}
+	<body class="homepage homepage_index">
+		{% include header.html %}
+		<main class="content container" role="main">
+			<div class="content-row">
+				{% include nav.html %}
+				<article class="inner-content">
+					<div class="inner-content">
+						<h1 id="the-chair-of-br-network-architectures-and-services">Figure 7</h1>
+
+						<h5>DPDK-l2fwd (HW)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;">
+								<img src="{{site.url}}/figures/reldiff/latencies-rate10000-dpdk-l2fwd-hw.pcap.reldiff.pdf.svg"  alt="reldiff/latencies-rate10000-dpdk-l2fwd-hw.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 10000 pkts/s</figcaption>
+							</figure>
+						</p>
+						<h5>DPDK-l2fwd (VM)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;u">
+								<img src="{{site.url}}/figures/reldiff/latencies-rate10000-dpdk-l2fwd-vm.pcap.reldiff.pdf.svg"  alt="reldiff/latencies-rate10000-dpdk-l2fwd-vm.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 10000 pkts/s</figcaption>
+							</figure>
+						</p>
+
+						<h5>Snort-filter (HW)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;" >
+								<img src="{{site.url}}/figures/reldiff/latencies-rate10000-snort-filter-hw.pcap.reldiff.pdf.svg" alt="figures/reldiff/latencies-rate10000-snort-filter-hw.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 10000 pkts/s</figcaption>
+							</figure>
+						</p>
+						<h5>Snort-filter (VM)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;" >
+								<img src="{{site.url}}/figures/reldiff/latencies-rate10000-snort-filter-vm.pcap.reldiff.pdf.svg" alt="figures/reldiff/latencies-rate10000-snort-filter-vm.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 10000 pkts/s</figcaption>
+							</figure>
+						</p>
+
+						<h5>Snort-fwd (HW)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;">
+								<img src="{{site.url}}/figures/reldiff/latencies-rate90000-snort-fwd-hw.pcap.reldiff.pdf.svg" alt="figures/reldiff/latencies-rate90000-snort-fwd-hw.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 90000 pkts/s</figcaption>
+							</figure>
+						</p>
+						<h5>Snort-fwd (VM)</h5>
+						<p>
+							<figure style="display:block;margin-left:auto;margin-right:auto;width=90%;">
+								<img src="{{site.url}}/figures/reldiff/latencies-rate90000-snort-fwd-vm.pcap.reldiff.pdf.svg" alt="figures/reldiff/latencies-rate90000-snort-fwd-vm.pcap.reldiff.pdf.svg"/>
+								<figcaption style="text-align:center;">Rate: 90000 pkts/s</figcaption>
+							</figure>
+						</p>
+
+						<h2 style="margin: 30px 0 15px 0;clear:both;">Steps to reproduce measurements</h2>
+
+                                                <p>The setup and experiment execution for the worst-case measurements of DPDK-l2fwd (HW/VM), Snort-fwd (HW/VM), and Snort-filter (HW/VM) evaluation is part of the description for <a href="{{site.url}}/web/hdr.html">Figures 3, 5, and 6</a>. The respective explanation for the RT kernel can be found <a href="https://gallenmu.github.io/low-latency/web/hdr.html">here</a></p>
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce figures</h2>
+						<h3>Raw data</h3>
+						<p>Pcaps (<a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/dpdk-l2fwd-nohz/hw/pcap">DPDK-l2fwd (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/dpdk-l2fwd-nohz/vm/pcap">DPDK-l2fwd (VM)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-fwd-nohz/hw/pcap">Snort-fwd (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-fwd-nohz/vm/pcap">Snort-fwd (VM)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-filter-nohz/hw/pcap">Snort-filter (HW)</a>, <a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/snort-filter-nohz/vm/pcap">Snort-filter (VM)</a>)</p>
+
+						<h3>Evaluation execution</h3>
+						<p><details>
+							<summary>Setup evaluator</summary>
+							{% include evaluator_setup.html %}
+						</details>
+						<details>
+							<summary>Generate figures</summary>
+							<p><pre><code>git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+#decompress pcaps
+cd /root/hipnet21
+for i in $(find . -iname *.zst); do zstd --rm -d $i; done;
+
+#create figures
+# MPATH = dpdk-l2fwd | snort-fwd | snort-filter
+# MODE = vm | hw
+# RATE = 10000, 20000 ... 120000
+cd /root/hipnet21/figures/$MPATH-nohz/$MODE/pcap
+su postgres -c "createuser -s root"
+dropdb --if-exists root
+createdb root
+export PGDATABASE=root
+for i in /root/hipnet21/measurements/$MPATH/$MODE/pcap/*-pre-*.pcap; do /root/hipnet21/scripts/pcap-import.sh $i; /root/hipnet21/scripts/pcap-analysis.sh $i; done;
+
+cd /root/hipnet21/low-latency/figures/$MPATH/$MODE/pcap
+su postgres -c "createuser -s root"
+dropdb --if-exists root
+createdb root
+export PGDATABASE=root
+for i in /root/hipnet21/low-latency/measurements/$MPATH/$MODE/pcap/*-pre-*.pcap; do /root/hipnet21/low-latency/scripts/pcap-import.sh $i; /root/hipnet21/scripts/pcap-analysis.sh $i; done;
+
+python3 /root/hipnet21/scripts/reldiff.py /root/hipnet21/low-latency/measurements/$MPATH/$MODE/latencies-pre-rate$RATE-$MPATH.pcap.hist.cdf.csv /root/hipnet21/measurements/$MPATH-nohz/$MODE/latencies-pre-rate$RATE-$MPATH.pcap.hist.cdf.csv > latencies-rate$RATE-$MPATH-$MODE.pcap.reldiff.csv
+python3 /root/hipnet21/scripts/rel-hdrplot-tex-create.py .
+for i in *.tex; do lualatex $i; done</code></pre></p>
+						</details></p>
+
+						<h3>Output</h3>
+						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures/reldiff">repository</a>.</p>
+					</div>
+				</article>
+			</div>
+		</main>
+		{% include footer.html %}
+	</body></html>

@@ -1,0 +1,44 @@
+<p><pre><code>echo 'deb http://deb.debian.org/debian experimental main contrib non-free
+deb-src http://deb.debian.org/debian experimental main contrib non-free' >> /etc/apt/sources.list
+
+apt update
+apt install -t experimental -y virt-manager qemu-system pkg-config libvirt-dev python-libvirt
+
+# bind rcu processes to core 0
+# recommended by https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html-single/performance_tuning_guide/#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_suggestions-Configuring_kernel_tick_time
+for i in `pgrep rcu[^c]` ; do taskset -pc 0 $i ; done
+
+# activate virtual functions
+rmmod ixgbe
+modprobe ixgbe max_vfs=1
+
+ip link set up dev eno7
+ip link set up dev eno8
+
+# disable ipv6 to avoid pf chatting on vf connection
+sysctl net.ipv6.conf.eno7.disable_ipv6=1
+sysctl net.ipv6.conf.eno8.disable_ipv6=1
+
+# download network config
+git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+# mgmt interface of VM
+virsh net-define /root/hipnet21/configs/vm/net.xml
+virsh net-start net
+
+# measurement interfaces of VM
+virsh net-define /root/hipnet21/configs/vm/passthrough7.xml
+virsh net-define /root/hipnet21/configs/vm/passthrough8.xml
+virsh net-start passthrough7
+virsh net-start passthrough8
+
+virt-install --cpu host-passthrough --memory 16384 --vcpus=3 --cpuset=1-3 --boot=network \
+--name vm --nodisks --network="network=net,mac=11:22:33:44:55:66,model=virtio" \
+--network="network=net7,mac=52:54:00:8d:9d:ad,model=virtio" \
+--network="network=net8,mac=52:54:00:21:f8:29,model=virtio" \
+--noautoconsole --graphics none --dry-run --controller="type=usb,model=none" --print-xml \
+--console "pty,target_type=virtio" \
+--cputune="vcpupin0.cpuset=1,vcpupin0.vcpu=0,vcpupin1.cpuset=2,vcpupin1.vcpu=1,vcpupin2.cpuset=3,vcpupin2.vcpu=2" > vm.xml
+
+virsh define vm.xml
+virsh start vm</code></pre></p>

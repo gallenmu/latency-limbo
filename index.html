@@ -1,0 +1,33 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+  {% include head.html %}
+  <body class="homepage homepage_index">
+    {% include header.html %}
+    <main class="content container" role="main">
+      <div class="content-row">
+	{% include nav.html %}
+        <article class="inner-content">
+          <div class="inner-content">
+            <h1 id="the-chair-of-br-network-architectures-and-services">Reproducing Evaluation Results</h1>
+            <p>This page describes the scripts and data necessary to reproduce the evaluation for the paper: "How Low Can You Go? Latency Limbo for Intrusion Prevention Systems".</p>
+
+             <h3>pos testbed</h3>
+               <p>The experiment on this page were created using the pos framework. pos is a experiment framework and testbed that automates the experiment workflow to create reproducible network experiments. pos was presented at <a href="https://conferences2.sigcomm.org/co-next/2021/#!/home">CoNEXT'21</a>.</p>
+               <p>Sebastian Gallenmüller, Dominik Scholz, Henning Stubbe, Georg Carle, <i>The pos Framework: A Methodology and Toolchain for Reproducible Network Experiments</i>, in The 17th International Conference on emerging Networking EXperiments and Technologies (CoNEXT ’21), Munich, Germany (Virtual Event), Dec. 2021.</p>
+                 <details>
+                   <summary>Bibtex</summary>
+                   {% include bibtex.html %}
+                 </details>
+               <p></p>
+
+            <div class="fadein">
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+    {% include footer.html %}
+</body></html>

@@ -1,0 +1,13 @@
+port:
+        rx: 'eno7'
+        tx: 'eno8'
+portno:
+        rx: 0
+        tx: 1
+dst:
+        srcmac: '52:54:00:8d:9d:ad'
+        dstmac: '52:54:00:21:f8:29'
+flownum: 10
+burst: 1
+l4param:
+        dstport: '53'

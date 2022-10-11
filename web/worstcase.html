@@ -1,0 +1,60 @@
+---
+# front matter tells Jekyll to process Liquid
+---
+<!DOCTYPE html>
+<html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" style="">
+	{% include head.html %}
+	<body class="homepage homepage_index">
+		{% include header.html %}
+		<main class="content container" role="main">
+			<div class="content-row">
+				{% include nav.html %}
+				<article class="inner-content">
+					<div class="inner-content">
+						<h1 id="the-chair-of-br-network-architectures-and-services">Figure 4</h1>
+
+						<h5>DPDK-l2fwd (HW)</h5>
+						<p><img src="{{site.url}}/figures/dpdk-l2fwd-nohz/hw/pcap/latencies-pre-rate10000-dpdk-l2fwd.pcap.worst-filtered.pdf.svg" style="display:block;margin-left:auto;margin-right:auto;width=90%;" alt="hipnet21/figures/dpdk-l2fwd-nohz/hw/pcap/latencies-pre-rate10000-dpdk-l2fwd.pcap.worst-filtered.pdf.svg"/></p>
+
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce measurements</h2>
+
+						<p>The setup and experiment execution for the worst-case measurements of DPDK-l2fwd (HW/VM) evaluation is part of the description for <a href="{{site.url}}/web/table.html">Table II</a>. </p>
+
+						<h2 style="margin: 30px 0 15px 0;">Steps to reproduce figures</h2>
+						<h3>Raw data</h3>
+						<p>Pcaps (<a href="https://github.com/gallenmu/hipnet21/tree/master/measurements/dpdk-l2fwd-nohz/hw/pcap">DPDK-l2fwd (HW)</a>)</p>
+
+						<h3>Evaluation execution</h3>
+						<p><details>
+							<summary>Setup evaluator</summary>
+							{% include evaluator_setup.html %}
+						</details>
+						<details>
+							<summary>Generate figures</summary>
+							<p><pre><code>git clone https://github.com/gallenmu/hipnet21 /root/hipnet21
+
+#decompress pcaps
+cd /root/hipnet21/measurements
+for i in $(find . -iname *.zst); do zstd --rm -d $i; done;
+
+#create hw figure
+export MPATH=dpdk-l2fwd-nohz
+cd /root/hipnet21/figures/$MPATH/hw/pcap
+su postgres -c "createuser -s root"
+dropdb --if-exists root
+createdb root
+export PGDATABASE=root
+for i in /root/hipnet21/measurements/$MPATH/hw/pcap/*-pre-rate10000-*.pcap; do /root/hipnet21/scripts/pcap-import.sh $i; /root/hipnet21/scripts/pcap-analysis.sh $i; done;
+python3 /root/hipnet21/scripts/pcap-tex-create.py .
+for i in *.tex; do lualatex $i; done</code></pre></p>
+						</details></p>
+
+						<h3>Output</h3>
+						<p>The precompiled output files can be found in the respective subfolders of the <a href="https://github.com/gallenmu/hipnet21/tree/master/figures/dpdk-l2fwd-nohz">repository</a>. The filename is latencies-pre-rate10000-dpdk-l2fwd.pcap.worst-filtered.pdf.</p>
+					</div>
+				</article>
+			</div>
+		</main>
+		{% include footer.html %}
+	</body></html>

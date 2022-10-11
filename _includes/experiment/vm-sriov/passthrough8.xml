@@ -1,0 +1,7 @@
+<network>
+	<name>passthrough8</name>
+	<forward mode='hostdev' managed='yes'>
+		<pf dev='eno8' />
+	</forward>
+</network>
+

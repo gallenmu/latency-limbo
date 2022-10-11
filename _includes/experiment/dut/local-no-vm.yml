@@ -1,0 +1,19 @@
+port:
+        rx: 'eno8'
+        tx: 'eno7'
+portno:
+        rx: '1'
+        tx: '0'
+pciadr:
+        rx: '04:00.0' # bitcoin* / ether* / dogecoin* eno7
+        #rx: '05:00.1' # ethercash ens1f0
+        tx: '04:00.1' # bitcoin* / ether* / dogecoin* eno8
+        #tx: '05:00.0' # ethercash ens1f1
+enic: 'eno1'
+cpu:
+        freq: '50'
+        turbo: '0'
+snort:
+        ruleset: 'security'
+dpdk:
+        commit: '5a802fb6cd9128f3a0a50c5942c336c88f03b252'
